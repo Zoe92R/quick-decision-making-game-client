@@ -8,7 +8,7 @@ export const CircleContainer = styled.div<CircleContainerProps>`
   display: flex;
   width: 100vw;
   justify-content: ${(props: CircleContainerProps) =>
-    props.isRight ? "flex-start" : "flex-end"};
+    props.isRight ? "flex-end" : "flex-start"};
   padding: 24px;
 `;
 

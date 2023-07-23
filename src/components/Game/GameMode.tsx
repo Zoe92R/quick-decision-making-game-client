@@ -1,9 +1,14 @@
-import { getRandomBoolean } from "../../utils/utiliyFunctions";
+import { FC } from "react";
+
 import { Circle, CircleContainer } from "./styles";
 
-const GameMode = () => {
+interface IGameMode {
+  isRight: boolean;
+}
+
+const GameMode: FC<IGameMode> = ({ isRight }) => {
   return (
-    <CircleContainer isRight={getRandomBoolean()}>
+    <CircleContainer isRight={isRight}>
       <Circle />
     </CircleContainer>
   );

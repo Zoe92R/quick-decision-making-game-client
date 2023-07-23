@@ -2,7 +2,7 @@ import { FC, FormEvent, useState } from "react";
 import Button from "@mui/material/Button";
 
 interface IGameForm {
-  handleStart: () => void;
+  handleStart: (name: string) => void;
 }
 
 const GameForm: FC<IGameForm> = ({ handleStart }) => {
@@ -10,7 +10,7 @@ const GameForm: FC<IGameForm> = ({ handleStart }) => {
 
   const handleSubmit = (event: FormEvent<HTMLElement>) => {
     event.preventDefault();
-    handleStart();
+    handleStart(name);
   };
 
   return (
