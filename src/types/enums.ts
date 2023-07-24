@@ -4,3 +4,9 @@ export enum UserGameStatus {
   WRONG_KEY = "Wrong Key",
   TOO_LATE = "Too late",
 }
+
+export enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+  UNDETERMINED = "undetermined",
+}

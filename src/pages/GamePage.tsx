@@ -6,10 +6,14 @@ import WaitingMode from "../components/WaitingMode/WaitingMode";
 import { getRandomBoolean, getRandomInRange } from "../utils/utilityFunctions";
 import GameMode from "../components/Game/GameMode";
 import { UserGameStatus } from "../types/enums";
+import axios from "../services/axiosConfig";
+import { UserResponse } from "../types/types";
 
 const GamePage: FC = () => {
   const [userName, setUserName] = useState("");
+  const [userId, setUserId] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
+  const [score, setScore] = useState(0);
   const [isCircleOnRight, setIsCircleOnRight] = useState(false);
   const [isCircleVisible, setIsCircleVisible] = useState(false);
   const [message, setMessage] = useState<UserGameStatus | "">("");
@@ -20,7 +24,6 @@ const GamePage: FC = () => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // check error - too soon
       if (isWaiting) return setMessage(UserGameStatus.TOO_SOON);
-      // if (isWaiting) return setMessage("Too Soon");
       if (isCircleVisible) {
         // check success
         if (
@@ -28,6 +31,7 @@ const GamePage: FC = () => {
           (!isCircleOnRight && event.key === "a")
         ) {
           setMessage(UserGameStatus.SUCCESS);
+          setScore((prev) => prev + 1);
         } else setMessage(UserGameStatus.WRONG_KEY);
         setIsCircleVisible(false);
       } else setMessage(UserGameStatus.TOO_LATE); // check error - too late
@@ -61,6 +65,43 @@ const GamePage: FC = () => {
     }
     return () => clearTimeout(circleVisibleTimeout);
   }, [isCircleVisible]);
+
+  useEffect(() => {
+    if (score && userName) {
+      (async () => {
+        try {
+          if (!userId) {
+            const response: UserResponse = (
+              await axios.request({
+                method: "POST",
+                url: "users",
+                data: { userName: userName, score: score },
+              })
+            ).data;
+            setUserId(response._id);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [score, userId, userName]);
+
+  useEffect(() => {
+    if (userId && score > 1) {
+      (async () => {
+        try {
+          await axios.request({
+            method: "PUT",
+            url: `users/${userId}`,
+            data: { score: score },
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    }
+  }, [score, userId]);
 
   const handleStart = (name: string) => {
     setUserName(name);
