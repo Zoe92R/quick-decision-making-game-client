@@ -6,8 +6,7 @@ import WaitingMode from "../components/WaitingMode/WaitingMode";
 import { getRandomBoolean, getRandomInRange } from "../utils/utilityFunctions";
 import GameMode from "../components/Game/GameMode";
 import { UserGameStatus } from "../types/enums";
-import axios from "../services/axiosConfig";
-import { UserResponse } from "../types/types";
+import { createUser, updateUser } from "../services/users";
 
 const GamePage: FC = () => {
   const [userName, setUserName] = useState("");
@@ -66,42 +65,14 @@ const GamePage: FC = () => {
     return () => clearTimeout(circleVisibleTimeout);
   }, [isCircleVisible]);
 
+  // creating user or updating existing user
   useEffect(() => {
-    if (score && userName) {
-      (async () => {
-        try {
-          if (!userId) {
-            const response: UserResponse = (
-              await axios.request({
-                method: "POST",
-                url: "users",
-                data: { userName: userName, score: score },
-              })
-            ).data;
-            setUserId(response._id);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      })();
+    if (score && userName && !userId) {
+      createUser(userName, score, setUserId);
+    } else if (userId && score > 1) {
+      updateUser(userId, score);
     }
   }, [score, userId, userName]);
-
-  useEffect(() => {
-    if (userId && score > 1) {
-      (async () => {
-        try {
-          await axios.request({
-            method: "PUT",
-            url: `users/${userId}`,
-            data: { score: score },
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      })();
-    }
-  }, [score, userId]);
 
   const handleStart = (name: string) => {
     setUserName(name);
