@@ -2,7 +2,7 @@ import { FC } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
-import { Message } from "./styles";
+import { Message, boxSx } from "./styles";
 import { UserGameStatus } from "../../types/enums";
 
 interface IWaitingMode {
@@ -11,13 +11,7 @@ interface IWaitingMode {
 
 const WaitingMode: FC<IWaitingMode> = ({ message }) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-    >
+    <Box sx={boxSx}>
       <CircularProgress />
       <Message isSuccess={message === UserGameStatus.SUCCESS}>
         {message}

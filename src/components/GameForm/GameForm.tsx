@@ -1,5 +1,6 @@
 import { FC, FormEvent, useState } from "react";
 import Button from "@mui/material/Button";
+import { GameFormContainer } from "./styles";
 
 interface IGameForm {
   handleStart: (name: string) => void;
@@ -14,21 +15,17 @@ const GameForm: FC<IGameForm> = ({ handleStart }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter your name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <Button variant="contained" type="submit">
-          START
-        </Button>
-      </form>
-    </div>
+    <GameFormContainer onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={name}
+        placeholder="Enter your name"
+        onChange={(e) => setName(e.target.value)}
+      />
+      <Button variant="contained" type="submit" size="small">
+        START
+      </Button>
+    </GameFormContainer>
   );
 };
 
