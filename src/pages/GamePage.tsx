@@ -67,9 +67,9 @@ const GamePage: FC = () => {
 
   // creating user or updating existing user
   useEffect(() => {
-    if (score && userName && !userId) {
-      createUser(userName, score, setUserId);
-    } else if (userId && score > 1) {
+    if (userName && !userId) {
+      createUser(userName, 0, setUserId);
+    } else if (userId && score) {
       updateUser(userId, score);
     }
   }, [score, userId, userName]);
